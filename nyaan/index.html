@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ねこメニュー</title>
+  <title>メニュー</title>
   <style>
     body {
       margin: 0;
@@ -94,7 +94,10 @@
       left: -20px;
     }
     .paw.right {
-      right: -20px;
+      width: 80px;
+      bottom: -30px;
+      left: -20px;
+      right: 20px;
     }
   </style>
 </head>
@@ -107,6 +110,7 @@
     <div class="row">
       <label>起動時間</label>
       <select>
+        <option>10分</option>
         <option>20分</option>
         <option>30分</option>
         <option>40分</option>
@@ -138,7 +142,7 @@
       </label>
     </div>
     <div class="row">
-      <label>ウィンドウ画面廻り</label>
+      <label>ウィンドウ画面かじり</label>
       <label class="toggle">
         <input type="checkbox">
         <span class="slider"></span>

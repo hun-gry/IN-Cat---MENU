@@ -4,16 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>メニュー</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
+      font-family: 'Noto Sans JP', sans-serif;
       background-color: #5ce0e4;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
+
     .menu-window {
       background-color: white;
       border-radius: 10px;
@@ -21,30 +23,39 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       width: 400px;
       position: relative;
+      overflow: visible;
     }
+
     h1 {
       text-align: center;
     }
+
+    .section {
+      border-top: 1px solid #ccc;
+      margin-top: 20px;
+      padding-top: 10px;
+    }
+
     .row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin: 10px 0;
     }
-    select, input[type="checkbox"] {
-      transform: scale(1.2);
-    }
+
     .toggle {
       position: relative;
       display: inline-block;
       width: 40px;
       height: 20px;
     }
+
     .toggle input {
       opacity: 0;
       width: 0;
       height: 0;
     }
+
     .slider {
       position: absolute;
       cursor: pointer;
@@ -56,6 +67,7 @@
       transition: .4s;
       border-radius: 20px;
     }
+
     .slider:before {
       position: absolute;
       content: "";
@@ -67,12 +79,15 @@
       transition: .4s;
       border-radius: 50%;
     }
+
     .toggle input:checked + .slider {
       background-color: #2196F3;
     }
+
     .toggle input:checked + .slider:before {
       transform: translateX(20px);
     }
+
     button {
       margin-top: 20px;
       width: 100%;
@@ -81,76 +96,122 @@
       background-color: white;
       border: 1px solid black;
       border-radius: 5px;
+      cursor: pointer;
     }
-    .paw {
+
+    .effect-image {
+      display: none;
       position: absolute;
-      width: 50px;
-      bottom: -20px;
-    }
-    .paw.left {
-      position:absolute;
-      width: 80px;
-      bottom: -30px;
-      left: -20px;
-    }
-    .paw.right {
-      width: 80px;
-      bottom: -30px;
-      left: -20px;
-      right: 20px;
+      width: 60px;
     }
   </style>
 </head>
 <body>
   <div class="menu-window">
     <h1>MENU</h1>
-    <div class="row">
-      <label>時間設定</label>
+
+    <!-- 時間設定 -->
+    <div class="section">
+      <div class="row">
+        <label>時間設定</label>
+      </div>
+      <div class="row">
+        <label>起動時間</label>
+        <select>
+          <option>OFF</option>
+          <option>10分</option>
+          <option>20分</option>
+          <option>30分</option>
+          <option>40分</option>
+          <option>50分</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>ランダム</label>
+        <label class="toggle">
+          <input type="checkbox">
+          <span class="slider"></span>
+        </label>
+      </div>
     </div>
-    <div class="row">
-      <label>起動時間</label>
-      <select>
-        <option>10分</option>
-        <option>20分</option>
-        <option>30分</option>
-        <option>40分</option>
-        <option>50分</option>
-      </select>
+
+    <!-- エフェクト -->
+    <div class="section">
+      <div class="row">
+        <label>エフェクト</label>
+      </div>
+
+      <div class="row">
+        <label>肉球</label>
+        <label class="toggle">
+          <input type="checkbox" id="pawToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <label>引っ掻き</label>
+        <label class="toggle">
+          <input type="checkbox" id="scratchToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <label>かじり</label>
+        <label class="toggle">
+          <input type="checkbox" id="biteToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
     </div>
-    <div class="row">
-      <label>ランダム</label>
-      <label class="toggle">
-        <input type="checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-    <div class="row">
-      <label>エフェクト</label>
-    </div>
-    <div class="row">
-      <label>肉球</label>
-      <label class="toggle">
-        <input type="checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-    <div class="row">
-      <label>引っ掻き</label>
-      <label class="toggle">
-        <input type="checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-    <div class="row">
-      <label>ウィンドウ画面かじり</label>
-      <label class="toggle">
-        <input type="checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-    <button>保存する</button>
-    <img src="paw-left.png" alt="paw" class="paw left">
-    <img src="paw-right.png" alt="paw" class="paw right">
+
+    <button id="saveBtn">保存する</button>
+
+    <!-- 画像 -->
+    <img src="paw.png" alt="paw" id="pawImg" class="effect-image">
+    <img src="scratch.png" alt="scratch" id="scratchImg" class="effect-image">
+    <img src="bite.png" alt="bite" id="biteImg" class="effect-image">
   </div>
+
+  <script>
+    const effects = [
+      {
+        toggleId: 'pawToggle',
+        imgId: 'pawImg',
+        position: { top: '10px', left: '10px' } // 左上
+      },
+      {
+        toggleId: 'scratchToggle',
+        imgId: 'scratchImg',
+        position: { bottom: '10px', left: '10px' } // 左下
+      },
+      {
+        toggleId: 'biteToggle',
+        imgId: 'biteImg',
+        position: { top: '10px', right: '10px' } // 右上
+      }
+    ];
+
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      effects.forEach(({ toggleId, imgId, position }) => {
+        const toggle = document.getElementById(toggleId);
+        const img = document.getElementById(imgId);
+
+        if (toggle.checked) {
+          img.style.display = 'block';
+          // 位置を一度リセットしてから設定
+          img.style.top = img.style.bottom = img.style.left = img.style.right = 'auto';
+          Object.entries(position).forEach(([key, value]) => {
+            img.style[key] = value;
+          });
+        } else {
+          img.style.display = 'none';
+        }
+      });
+
+      alert('設定を保存しました！');
+    });
+  </script>
 </body>
 </html>

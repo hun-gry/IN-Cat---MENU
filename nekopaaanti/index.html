@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>肉球トレイル</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: #f9f9f9;
+      cursor: none;
+    }
+    .paw {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-image: url('nikukyyyuuuto.png'); /* ←ここに肉球の画像パス */
+      background-size: cover;
+      pointer-events: none;
+      animation: fade 1s forwards;
+    }
+    @keyframes fade {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+document.addEventListener('mousemove', function(e) {
+  const paw = document.createElement('div');
+  paw.className = 'paw';
+  paw.style.left = e.pageX + 'px';
+  paw.style.top = e.pageY + 'px';
+  document.body.appendChild(paw);
+  
+  setTimeout(() => {
+    paw.remove();
+  }, 1000); // 1秒後に消える
+});
+</script>
+
+</body>
+</html>

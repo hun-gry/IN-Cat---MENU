@@ -14,6 +14,13 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      font-size: 16px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 15px;
+      }
     }
 
     .menu-window {
@@ -21,19 +28,31 @@
       border-radius: 10px;
       padding: 30px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      width: 400px;
+      width: 90%;
+      max-width: 400px;
       position: relative;
       overflow: visible;
     }
 
     h1 {
       text-align: center;
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0 0 10px 0;
+      border-left: 4px solid #2196F3;
+      padding-left: 8px;
     }
 
     .section {
       border-top: 1px solid #ccc;
       margin-top: 20px;
-      padding-top: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
     .row {
@@ -112,9 +131,7 @@
 
     <!-- 時間設定 -->
     <div class="section">
-      <div class="row">
-        <label>時間設定</label>
-      </div>
+      <h2>時間設定</h2>
       <div class="row">
         <label>起動時間</label>
         <select>
@@ -137,10 +154,7 @@
 
     <!-- エフェクト -->
     <div class="section">
-      <div class="row">
-        <label>エフェクト</label>
-      </div>
-
+      <h2>エフェクト</h2>
       <div class="row">
         <label>肉球</label>
         <label class="toggle">
@@ -148,7 +162,6 @@
           <span class="slider"></span>
         </label>
       </div>
-
       <div class="row">
         <label>引っ掻き</label>
         <label class="toggle">
@@ -156,7 +169,6 @@
           <span class="slider"></span>
         </label>
       </div>
-
       <div class="row">
         <label>かじり</label>
         <label class="toggle">
@@ -179,17 +191,17 @@
       {
         toggleId: 'pawToggle',
         imgId: 'pawImg',
-        position: { top: '10px', left: '10px' } // 左上
+        position: { top: '10px', left: '10px' }
       },
       {
         toggleId: 'scratchToggle',
         imgId: 'scratchImg',
-        position: { bottom: '10px', left: '10px' } // 左下
+        position: { bottom: '10px', left: '10px' }
       },
       {
         toggleId: 'biteToggle',
         imgId: 'biteImg',
-        position: { top: '10px', right: '10px' } // 右上
+        position: { top: '10px', right: '10px' }
       }
     ];
 
@@ -200,7 +212,6 @@
 
         if (toggle.checked) {
           img.style.display = 'block';
-          // 位置を一度リセットしてから設定
           img.style.top = img.style.bottom = img.style.left = img.style.right = 'auto';
           Object.entries(position).forEach(([key, value]) => {
             img.style[key] = value;

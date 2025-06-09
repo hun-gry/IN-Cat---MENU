@@ -122,6 +122,7 @@
       display: none;
       position: absolute;
       width: 60px;
+      pointer-events: none; /* ユーザーによる干渉防止 */
     }
   </style>
 </head>
@@ -172,7 +173,7 @@
       <div class="row">
         <label>猫の手</label>
         <label class="toggle">
-          <input type="checkbox" id="biteToggle">
+          <input type="checkbox" id="handToggle">
           <span class="slider"></span>
         </label>
       </div>
@@ -180,28 +181,29 @@
 
     <button id="saveBtn">保存する</button>
 
-    <!-- 画像 -->
+    <!-- エフェクト画像 -->
     <img src="paw.png" alt="paw" id="pawImg" class="effect-image">
     <img src="scratch.png" alt="scratch" id="scratchImg" class="effect-image">
-    <img src="pawwau.png" alt="bite" id="biteImg" class="effect-image">
+    <img src="paw-hand.png" alt="hand" id="handImg" class="effect-image">
   </div>
 
   <script>
+    // トグルに対応する画像と、その表示座標（X, Y）を定義
     const effects = [
       {
         toggleId: 'pawToggle',
         imgId: 'pawImg',
-        position: { top: '10px', left: '10px' }
+        position: { x: 50, y: 30 }
       },
       {
         toggleId: 'scratchToggle',
         imgId: 'scratchImg',
-        position: { bottom: '10px', left: '10px' }
+        position: { x: 100, y: 30 }
       },
       {
-        toggleId: 'biteToggle',
-        imgId: 'biteImg',
-        position: { top: '10px', right: '10px' }
+        toggleId: 'handToggle',
+        imgId: 'handImg',
+        position: { x: 150, y: 30 }
       }
     ];
 
@@ -212,10 +214,8 @@
 
         if (toggle.checked) {
           img.style.display = 'block';
-          img.style.top = img.style.bottom = img.style.left = img.style.right = 'auto';
-          Object.entries(position).forEach(([key, value]) => {
-            img.style[key] = value;
-          });
+          img.style.left = `${position.x}px`;
+          img.style.top = `${position.y}px`;
         } else {
           img.style.display = 'none';
         }

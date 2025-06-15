@@ -172,40 +172,36 @@
     <div class="logo">
       <img src="IN Cat Logo.png" alt="IN Cat ロゴ" class="logo-img">
     </div>
-    <button onclick="goToScreen('screen-info')">はじめる</button>
+    <button onclick="goToScreen('screen-lang')">START!</button>
+  </div>
+
+  <!-- 言語選択画面 -->
+  <div id="screen-lang" class="screen">
+    <h2>言語を選択してください<br><small>Select your language</small></h2>
+    <button onclick="selectLanguage('ja')">日本語</button>
+    <button onclick="selectLanguage('en')">English</button>
   </div>
 
   <!-- 説明画面 -->
   <div id="screen-info" class="screen">
-    <h2>現在利用者を癒すため開発中です</h2>
-    <div class="description">
-      <p><strong>-コンセプト-</strong><br>猫に服従した癒し系アプリ</p>
-      <p><strong>-機能-</strong><br>通知<br>スクリーンセーバー<br><small>※追加したい機能があればお知らせください</small></p>
-    </div>
-    <button onclick="goToScreen('screen-menu')">設定に進む</button>
+    <h2></h2>
+    <div class="description"></div>
+    <button onclick="goToScreen('screen-menu')"></button>
   </div>
 
   <!-- 設定画面 -->
   <div id="screen-menu" class="screen">
     <img src="IN Cat Logo.png" alt="戻る" id="backBtn" class="back-button">
-
-    <h1>MENU</h1>
+    <h1></h1>
 
     <div class="section">
-      <h3>時間設定</h3>
+      <h3></h3>
       <div class="row">
-        <label>起動時間</label>
-        <select>
-          <option>OFF</option>
-          <option>10分</option>
-          <option>20分</option>
-          <option>30分</option>
-          <option>40分</option>
-          <option>50分</option>
-        </select>
+        <label></label>
+        <select id="timeSelect"></select>
       </div>
       <div class="row">
-        <label>ランダム(スクリーンセーバー)</label>
+        <label></label>
         <label class="toggle">
           <input type="checkbox">
           <span class="slider"></span>
@@ -214,23 +210,23 @@
     </div>
 
     <div class="section">
-      <h3>エフェクト</h3>
+      <h3></h3>
       <div class="row">
-        <label>肉球</label>
+        <label></label>
         <label class="toggle">
           <input type="checkbox" id="pawToggle">
           <span class="slider"></span>
         </label>
       </div>
       <div class="row">
-        <label>引っ掻き</label>
+        <label></label>
         <label class="toggle">
           <input type="checkbox" id="scratchToggle">
           <span class="slider"></span>
         </label>
       </div>
       <div class="row">
-        <label>猫の手</label>
+        <label></label>
         <label class="toggle">
           <input type="checkbox" id="handToggle">
           <span class="slider"></span>
@@ -238,20 +234,20 @@
       </div>
     </div>
 
-    <button id="saveBtn">保存する</button>
+    <button id="saveBtn"></button>
 
-    <!-- 画像とラベル -->
+    <!-- エフェクト画像 -->
     <div class="effect-container" id="pawEffect">
       <img src="paw.png" alt="paw" class="effect-image">
-      <div class="label">肉球</div>
+      <div class="label"></div>
     </div>
     <div class="effect-container" id="scratchEffect">
       <img src="scratch.png" alt="scratch" class="effect-image">
-      <div class="label">引っ掻き</div>
+      <div class="label"></div>
     </div>
     <div class="effect-container" id="handEffect">
       <img src="paw-hand.png" alt="hand" class="effect-image">
-      <div class="label">猫の手</div>
+      <div class="label"></div>
     </div>
   </div>
 
@@ -259,6 +255,85 @@
     function goToScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+    }
+
+    const translations = {
+      ja: {
+        infoTitle: '現在利用者を癒すため開発中です',
+        concept: '-コンセプト-<br>猫に服従した癒し系アプリ',
+        feature: '-機能-<br>通知<br>スクリーンセーバー<br><small>※追加したい機能があればお知らせください</small>',
+        nextButton: '設定に進む',
+        startButton: 'はじめる',
+        saveButton: '保存する',
+        alertSaved: '設定を保存しました！',
+        menuTitle: 'MENU',
+        timeSetting: '時間設定',
+        launchTime: '起動時間',
+        randomSS: 'ランダム(スクリーンセーバー)',
+        effects: 'エフェクト',
+        paw: '肉球',
+        scratch: '引っ掻き',
+        hand: '猫の手'
+      },
+      en: {
+        infoTitle: 'Currently under development to heal users',
+        concept: '-Concept-<br>A healing app ruled by cats',
+        feature: '-Features-<br>Notifications<br>Screensaver<br><small>*Feel free to suggest additional features</small>',
+        nextButton: 'Go to Settings',
+        startButton: 'Start',
+        saveButton: 'Save Settings',
+        alertSaved: 'Settings saved!',
+        menuTitle: 'MENU',
+        timeSetting: 'Time Settings',
+        launchTime: 'Launch Time',
+        randomSS: 'Random (Screensaver)',
+        effects: 'Effects',
+        paw: 'Paw',
+        scratch: 'Scratch',
+        hand: 'Cat Hand'
+      }
+    };
+
+    let currentLang = 'ja';
+
+    function selectLanguage(lang) {
+      currentLang = lang;
+      applyLanguage();
+      goToScreen('screen-info');
+    }
+
+    function applyLanguage() {
+      const t = translations[currentLang];
+      document.querySelector('#screen-info h2').innerHTML = t.infoTitle;
+      document.querySelector('#screen-info .description').innerHTML = `
+        <p><strong>${t.concept}</strong></p>
+        <p><strong>${t.feature}</strong></p>
+      `;
+      document.querySelector('#screen-info button').innerText = t.nextButton;
+      document.querySelector('#screen-start button').innerText = t.startButton;
+      document.querySelector('#saveBtn').innerText = t.saveButton;
+      document.querySelector('#screen-menu h1').innerText = t.menuTitle;
+      document.querySelectorAll('.section')[0].querySelector('h3').innerText = t.timeSetting;
+      document.querySelectorAll('.row')[0].querySelector('label').innerText = t.launchTime;
+      document.querySelectorAll('.row')[1].querySelector('label').innerText = t.randomSS;
+      document.querySelectorAll('.section')[1].querySelector('h3').innerText = t.effects;
+      const effectLabels = document.querySelectorAll('.section')[1].querySelectorAll('.row');
+      effectLabels[0].querySelector('label').innerText = t.paw;
+      effectLabels[1].querySelector('label').innerText = t.scratch;
+      effectLabels[2].querySelector('label').innerText = t.hand;
+      document.querySelector('#pawEffect .label').innerText = t.paw;
+      document.querySelector('#scratchEffect .label').innerText = t.scratch;
+      document.querySelector('#handEffect .label').innerText = t.hand;
+
+      // 時間選択肢の翻訳
+      const timeSelect = document.getElementById('timeSelect');
+      const times = ['OFF', 10, 20, 30, 40, 50];
+      timeSelect.innerHTML = '';
+      times.forEach(val => {
+        const option = document.createElement('option');
+        option.textContent = val === 'OFF' ? 'OFF' : (currentLang === 'ja' ? `${val}分` : `${val} min`);
+        timeSelect.appendChild(option);
+      });
     }
 
     const effects = [
@@ -292,8 +367,7 @@
           container.style.display = 'none';
         }
       });
-
-      alert('設定を保存しました！');
+      alert(translations[currentLang].alertSaved);
     });
 
     document.getElementById('backBtn').addEventListener('click', () => {

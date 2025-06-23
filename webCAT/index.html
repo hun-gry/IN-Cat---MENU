@@ -38,14 +38,6 @@
       position: relative;
     }
 
-    .logo .paw {
-      font-size: 20px;
-      color: purple;
-      position: absolute;
-      left: -15px;
-      top: -5px;
-    }
-
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -148,13 +140,13 @@
     }
 
     .back-button {
-      position: absolute;
-      top: 20px;
-      left: 367px;
-      width: 50px;
-      height: 20px;
+      width: 80px;
+      height: auto;
       cursor: pointer;
       border-radius: 8px;
+      background-color: transparent;
+      display: block;
+      margin: 0 auto 10px;
     }
 
     .logo-img {
@@ -162,6 +154,18 @@
       height: auto;
       display: block;
       margin: 0 auto;
+    }
+    /* デモ画面要素 ------------------------*/
+    .demo-effect {
+    animation: pop 0.5s ease-out;
+    pointer-events: none;
+    z-index: 10;
+    }
+
+    @keyframes pop {
+    0% { transform: scale(0.2); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
@@ -235,6 +239,7 @@
     </div>
 
     <button id="saveBtn"></button>
+    <button onclick="goToDemo()">デモを見る</button>
 
     <!-- エフェクト画像 -->
     <div class="effect-container" id="pawEffect">
@@ -250,6 +255,21 @@
       <div class="label"></div>
     </div>
   </div>
+
+ <!-- デモ画面 -->
+<div id="screen-demo" class="screen">
+  <img src="IN Cat Logo.png" alt="戻る" id="demoBackBtn" class="back-button">
+  <h2>デモ画面</h2>
+  <p>設定した効果がどのように表示されるかを確認できます。</p>
+
+  <div id="demo-area" style="position: relative; width: 100%; height: 300px; background-color: #eef; border-radius: 12px; overflow: hidden;"></div>
+  <div style="margin-top: 20px;">
+    <button onclick="stopDemoAnimation()">強制終了</button>
+    <button onclick="startDemoAnimation()">強制起動</button>
+  </div>
+  <div id="demo-countdown" style="margin-top: 10px; font-size: 18px; font-weight: bold;"></div>
+</div>
+
 
   <script>
     function goToScreen(id) {
@@ -325,7 +345,6 @@
       document.querySelector('#scratchEffect .label').innerText = t.scratch;
       document.querySelector('#handEffect .label').innerText = t.hand;
 
-      // 時間選択肢の翻訳
       const timeSelect = document.getElementById('timeSelect');
       const times = ['OFF', 10, 20, 30, 40, 50];
       timeSelect.innerHTML = '';
@@ -370,9 +389,87 @@
       alert(translations[currentLang].alertSaved);
     });
 
+    function goToDemo() {
+      goToScreen('screen-demo');
+      document.getElementById('demo-paw').style.display = pawToggle.checked ? 'block' : 'none';
+      document.getElementById('demo-scratch').style.display = scratchToggle.checked ? 'block' : 'none';
+      document.getElementById('demo-hand').style.display = handToggle.checked ? 'block' : 'none';
+
+      document.getElementById('demo-paw').style.left = '50px';
+      document.getElementById('demo-paw').style.top = '30px';
+      document.getElementById('demo-scratch').style.left = '130px';
+      document.getElementById('demo-scratch').style.top = '30px';
+      document.getElementById('demo-hand').style.left = '200px';
+      document.getElementById('demo-hand').style.top = '30px';
+    }
+
     document.getElementById('backBtn').addEventListener('click', () => {
       goToScreen('screen-info');
     });
+
+    document.getElementById('demoBackBtn').addEventListener('click', () => {
+      goToScreen('screen-menu');
+    });
+      let demoInterval;
+
+  function randomEffectImage() {
+    const availableEffects = [];
+    if (document.getElementById('pawToggle').checked) availableEffects.push('paw.png');
+    if (document.getElementById('scratchToggle').checked) availableEffects.push('scratch.gif');
+    if (document.getElementById('handToggle').checked) availableEffects.push('paw-hand.png');
+
+    if (availableEffects.length === 0) return;
+
+    const img = document.createElement('img');
+    img.src = availableEffects[Math.floor(Math.random() * availableEffects.length)];
+    img.className = 'demo-effect';
+    img.style.position = 'absolute';
+    img.style.width = '60px';
+
+    const area = document.getElementById('demo-area');
+    const maxX = area.clientWidth - 60;
+    const maxY = area.clientHeight - 60;
+
+    img.style.left = `${Math.floor(Math.random() * maxX)}px`;
+    img.style.top = `${Math.floor(Math.random() * maxY)}px`;
+
+    area.appendChild(img);
+
+    setTimeout(() => {
+      img.remove();
+    }, 1500);
+  }
+
+  function startDemoAnimation() {
+    stopDemoAnimation(); // 念のため止める
+    demoInterval = setInterval(randomEffectImage, 700);
+  }
+
+  function stopDemoAnimation() {
+    clearInterval(demoInterval);
+  }
+
+  function goToDemo() {
+    goToScreen('screen-demo');
+    const countdownEl = document.getElementById('demo-countdown');
+    let countdown = 5;
+    countdownEl.textContent = `${countdown}秒後に起動します...`;
+    const timer = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        countdownEl.textContent = `${countdown}秒後に起動します...`;
+      } else {
+        clearInterval(timer);
+        countdownEl.textContent = '起動中...';
+        startDemoAnimation();
+      }
+    }, 1000);
+  }
+
+  document.getElementById('demoBackBtn').addEventListener('click', () => {
+    stopDemoAnimation();
+    goToScreen('screen-menu');
+  });
   </script>
 </body>
 </html>

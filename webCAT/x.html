@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IN Cat image</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #5ce0e4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .screen {
+      display: none;
+      width: 90%;
+      max-width: 500px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .logo {
+      font-size: 36px;
+      color: #6757f3;
+      font-weight: bold;
+      position: relative;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #6757f3;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .description {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .section {
+      border-top: 1px solid #ccc;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 20px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    .toggle input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    .toggle input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .effect-container {
+      position: absolute;
+      display: none;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .effect-image {
+      width: 60px;
+      pointer-events: none;
+    }
+
+    .label {
+      font-size: 14px;
+      color: #333;
+      background-color: rgba(255,255,255,0.7);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 2px;
+    }
+
+    .demo-effect {
+      position: absolute;
+      animation: pop 0.4s ease-out;
+      pointer-events: none;
+      width: 60px;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.2); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    #countdown {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- デモ画面 -->
+  <div id="screen-demo" class="screen">
+    <img src="IN Cat Logo.png" alt="戻る" id="demoBackBtn" class="back-button">
+    <h2>デモ画面</h2>
+    <p>設定した効果がどのように表示されるかを確認できます。</p>
+
+    <div id="demo-area" style="position: relative; width: 100%; height: 300px; background-color: #eef; border-radius: 12px; overflow: hidden;"></div>
+    <div id="countdown"></div>
+    <div>
+      <button onclick="startDemo()">強制起動</button>
+      <button onclick="stopDemo()">強制終了</button>
+    </div>
+  </div>
+
+  <script>
+    let demoInterval;
+    function goToScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function startDemo() {
+      stopDemo();
+      demoInterval = setInterval(() => {
+        const container = document.getElementById('demo-area');
+        const areaWidth = container.clientWidth;
+        const areaHeight = container.clientHeight;
+        const types = [];
+        if (pawToggle.checked) types.push('paw.png');
+        if (scratchToggle.checked) types.push('scratch.gif');
+        if (handToggle.checked) types.push('paw-hand.png');
+        if (types.length === 0) return;
+
+        const img = document.createElement('img');
+        img.src = types[Math.floor(Math.random() * types.length)];
+        img.className = 'demo-effect';
+        img.style.left = `${Math.random() * (areaWidth - 60)}px`;
+        img.style.top = `${Math.random() * (areaHeight - 60)}px`;
+        container.appendChild(img);
+        setTimeout(() => img.remove(), 2000);
+      }, 800);
+    }
+
+    function stopDemo() {
+      clearInterval(demoInterval);
+    }
+
+    function goToDemo() {
+      goToScreen('screen-demo');
+      startCountdown(5);
+    }
+
+    function startCountdown(sec) {
+      const display = document.getElementById('countdown');
+      display.innerText = `${sec}秒後に起動します...`;
+      const timer = setInterval(() => {
+        sec--;
+        if (sec > 0) {
+          display.innerText = `${sec}秒後に起動します...`;
+        } else {
+          clearInterval(timer);
+          display.innerText = '起動中...';
+          startDemo();
+        }
+      }, 1000);
+    }
+
+    document.getElementById('demoBackBtn').addEventListener('click', () => {
+      stopDemo();
+      goToScreen('screen-menu');
+    });
+  </script>
+</body>
+</html>

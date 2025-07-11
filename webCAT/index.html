@@ -239,7 +239,7 @@
     </div>
 
     <button id="saveBtn"></button>
-    <button onclick="goToDemo()">デモを見る</button>
+    <button id="demoBtn" onclick="goToDemo()">デモを見る</button>
 
     <!-- エフェクト画像 -->
     <div class="effect-container" id="pawEffect">
@@ -293,7 +293,16 @@
         effects: 'エフェクト',
         paw: '肉球',
         scratch: '引っ掻き',
-        hand: '猫の手'
+        hand: '猫の手',
+        langTitle: '言語を選択してください',
+        langSub: 'Select your language',
+        demoTitle: 'デモ画面',
+        demoDesc: '設定した効果がどのように表示されるかを確認できます。',
+        forceStop: '強制終了',
+        forceStart: '強制起動',
+        countdownPrefix: '秒後に起動します...',
+        launching: '起動中...',
+        seeDemo: 'デモを見る',
       },
       en: {
         infoTitle: 'Currently under development to heal users',
@@ -310,7 +319,16 @@
         effects: 'Effects',
         paw: 'Paw',
         scratch: 'Scratch',
-        hand: 'Cat Hand'
+        hand: 'Cat Hand',
+        langTitle: 'Please select a language',
+        langSub: '言語を選択してください',
+        demoTitle: 'Demo Screen',
+        demoDesc: 'You can check how the effects will be displayed.',
+        forceStop: 'Force Stop',
+        forceStart: 'Force Start',
+        countdownPrefix: 'Launching in',
+        launching: 'Launching...',
+        seeDemo: 'View Demo',
       }
     };
 
@@ -352,6 +370,15 @@
         const option = document.createElement('option');
         option.textContent = val === 'OFF' ? 'OFF' : (currentLang === 'ja' ? `${val}分` : `${val} min`);
         timeSelect.appendChild(option);
+
+      // 言語選択画面の見出し
+      document.querySelector('#screen-lang h2').innerHTML = `${t.langTitle}<br><small>${t.langSub}</small>`;
+      // デモ画面
+      document.querySelector('#screen-demo h2').innerText = t.demoTitle;
+      document.querySelector('#screen-demo p').innerText = t.demoDesc;
+      document.querySelectorAll('#screen-demo button')[0].innerText = t.forceStop;
+      document.querySelectorAll('#screen-demo button')[1].innerText = t.forceStart;
+      document.getElementById('demoBtn').innerText = t.seeDemo;
       });
     }
 
@@ -453,18 +480,18 @@
     goToScreen('screen-demo');
     const countdownEl = document.getElementById('demo-countdown');
     let countdown = 5;
-    countdownEl.textContent = `${countdown}秒後に起動します...`;
+    countdownEl.textContent = `${countdown}${translations[currentLang].countdownPrefix}`;
     const timer = setInterval(() => {
       countdown--;
       if (countdown > 0) {
-        countdownEl.textContent = `${countdown}秒後に起動します...`;
+        countdownEl.textContent = `${countdown}${translations[currentLang].countdownPrefix}`;
       } else {
         clearInterval(timer);
-        countdownEl.textContent = '起動中...';
+        countdownEl.textContent = translations[currentLang].launching;
         startDemoAnimation();
-      }
-    }, 1000);
-  }
+    } 
+  }, 1000);
+}
 
   document.getElementById('demoBackBtn').addEventListener('click', () => {
     stopDemoAnimation();
